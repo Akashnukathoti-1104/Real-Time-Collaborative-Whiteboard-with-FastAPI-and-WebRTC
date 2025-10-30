@@ -1,0 +1,25 @@
+{
+  "name": "collaborative-whiteboard-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for collaborative whiteboard application",
+  "main": "public/index.html",
+  "scripts": {
+    "start": "python -m http.server 3000",
+    "dev": "python -m http.server 3000",
+    "build": "echo 'No build process needed for vanilla JS'",
+    "lint": "echo 'No linting configured'",
+    "test": "echo 'No tests configured'"
+  },
+  "keywords": [
+    "whiteboard",
+    "collaboration",
+    "canvas",
+    "drawing",
+    "real-time"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  }
+}
