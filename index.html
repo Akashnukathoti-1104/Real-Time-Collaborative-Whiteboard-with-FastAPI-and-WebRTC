@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Whiteboard</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../src/css/style.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Loading Screen -->
+        <div id="loading-screen" class="loading-screen">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Loading Collaborative Whiteboard...</p>
+        </div>
+
+        <!-- Login/Register Section -->
+        <div id="auth-section" class="auth-section d-none">
+            <div class="container-fluid h-100">
+                <div class="row h-100">
+                    <div class="col-lg-6 d-none d-lg-block auth-bg"></div>
+                    <div class="col-lg-6 d-flex flex-column justify-content-center align-items-center p-5">
+                        <div class="auth-container w-100" style="max-width: 400px;">
+                            <div class="text-center mb-4">
+                                <h1 class="fw-bold text-primary">
+                                    <i class="bi bi-palette"></i> Whiteboard
+                                </h1>
+                                <p class="text-muted">Collaborate in real-time</p>
+                            </div>
+                            
+                            <ul class="nav nav-pills mb-4" id="authTab" role="tablist">
+                                <li class="nav-item w-50" role="presentation">
+                                    <button class="nav-link w-100 active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab">
+                                        Login
+                                    </button>
+                                </li>
+                                <li class="nav-item w-50" role="presentation">
+                                    <button class="nav-link w-100" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab">
+                                        Register
+                                    </button>
+                                </li>
+                            </ul>
+                            
+                            <div class="tab-content" id="authTabContent">
+                                <div class="tab-pane fade show active" id="login" role="tabpanel">
+                                    <form id="login-form">
+                                        <div class="mb-3">
+                                            <label for="login-username" class="form-label">Username</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                <input type="text" class="form-control" id="login-username" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="login-password" class="form-label">Password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                <input type="password" class="form-control" id="login-password" required>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="bi bi-box-arrow-in-right"></i> Login
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                
+                                <div class="tab-pane fade" id="register" role="tabpanel">
+                                    <form id="register-form">
+                                        <div class="mb-3">
+                                            <label for="register-username" class="form-label">Username</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                <input type="text" class="form-control" id="register-username" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="register-email" class="form-label">Email</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                <input type="email" class="form-control" id="register-email" required>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="register-password" class="form-label">Password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                <input type="password" class="form-control" id="register-password" required>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-success">
+                                                <i class="bi bi-person-plus"></i> Register
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Whiteboard Section -->
+        <div id="whiteboard-section" class="whiteboard-section d-none">
+            <!-- Navigation Bar -->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+                <div class="container-fluid">
+                    <a class="navbar-brand" href="#">
+                        <i class="bi bi-palette-fill"></i> Whiteboard
+                    </a>
+                    
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav me-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="new-whiteboard-btn">
+                                    <i class="bi bi-plus-circle"></i> New
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" id="my-whiteboards-btn">
+                                    <i class="bi bi-folder"></i> My Whiteboards
+                                </a>
+                            </li>
+                        </ul>
+                        
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown">
+                                    <i class="bi bi-person-circle"></i> <span id="username-display"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" id="profile-btn">
+                                        <i class="bi bi-person"></i> Profile
+                                    </a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#" id="logout-btn">
+                                        <i class="bi bi-box-arrow-right"></i> Logout
+                                    </a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Main Content -->
+            <div class="container-fluid main-content">
+                <div class="row h-100">
+                    <!-- Tools Panel -->
+                    <div class="col-md-2 tools-panel p-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0"><i class="bi bi-tools"></i> Drawing Tools</h6>
+                            </div>
+                            <div class="card-body">
+                                <!-- Tool Selection -->
+                                <div class="mb-3">
+                                    <label class="form-label">Tool</label>
+                                    <div class="btn-group-vertical w-100" role="group">
+                                        <input type="radio" class="btn-check" name="tool" id="pen-tool" autocomplete="off" checked>
+                                        <label class="btn btn-outline-primary btn-sm" for="pen-tool">
+                                            <i class="bi bi-pen"></i> Pen
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="tool" id="eraser-tool" autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="eraser-tool">
+                                            <i class="bi bi-eraser"></i> Eraser
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="tool" id="line-tool" autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="line-tool">
+                                            <i class="bi bi-slash-lg"></i> Line
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="tool" id="rectangle-tool" autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="rectangle-tool">
+                                            <i class="bi bi-square"></i> Rectangle
+                                        </label>
+                                        
+                                        <input type="radio" class="btn-check" name="tool" id="circle-tool" autocomplete="off">
+                                        <label class="btn btn-outline-primary btn-sm" for="circle-tool">
+                                            <i class="bi bi-circle"></i> Circle
+                                        </label>
+                                    </div>
+                                </div>
+                                
+                                <!-- Color Picker -->
+                                <div class="mb-3">
+                                    <label for="color-picker" class="form-label">Color</label>
+                                    <div class="d-flex align-items-center">
+                                        <input type="color" class="form-control form-control-color me-2" id="color-picker" value="#000000">
+                                        <input type="text" class="form-control form-control-sm" id="color-hex" value="#000000" maxlength="7">
+                                    </div>
+                                </div>
+                                
+                                <!-- Line Width -->
+                                <div class="mb-3">
+                                    <label for="line-width" class="form-label">
+                                        Width: <span id="line-width-value">2</span>px
+                                    </label>
+                                    <input type="range" class="form-range" id="line-width" min="1" max="20" value="2">
+                                </div>
+                                
+                                <!-- Action Buttons -->
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-danger btn-sm" id="clear-canvas-btn">
+                                        <i class="bi bi-trash"></i> Clear
+                                    </button>
+                                    <button class="btn btn-success btn-sm" id="save-canvas-btn">
+                                        <i class="bi bi-download"></i> Save
+                                    </button>
+                                    <button class="btn btn-info btn-sm" id="undo-btn">
+                                        <i class="bi bi-arrow-counterclockwise"></i> Undo
+                                    </button>
+                                    <button class="btn btn-info btn-sm" id="redo-btn">
+                                        <i class="bi bi-arrow-clockwise"></i> Redo
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Canvas Area -->
+                    <div class="col-md-8 canvas-container p-3">
+                        <div class="card h-100">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0" id="whiteboard-title">New Whiteboard</h5>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary" id="share-btn" title="Share">
+                                        <i class="bi bi-share"></i>
+                                    </button>
+                                    <button class="btn btn-sm btn-outline-primary" id="fullscreen-btn" title="Fullscreen">
+                                        <i class="bi bi-fullscreen"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body p-0 canvas-wrapper">
+                                <canvas id="whiteboard-canvas"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Collaborators Panel -->
+                    <div class="col-md-2 collaborators-panel p-3">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                <h6 class="mb-0">
+                                    <i class="bi bi-people"></i> Collaborators
+                                    <span class="badge bg-primary float-end" id="collaborator-count">0</span>
+                                </h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="collaborators-list" class="list-group list-group-flush">
+                                    <!-- Collaborators will be added here dynamically -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modals -->
+        <!-- New Whiteboard Modal -->
+        <div class="modal fade" id="new-whiteboard-modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Create New Whiteboard</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="new-whiteboard-form">
+                            <div class="mb-3">
+                                <label for="whiteboard-name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="whiteboard-name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="whiteboard-description" class="form-label">Description</label>
+                                <textarea class="form-control" id="whiteboard-description" rows="3"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" id="create-whiteboard-btn">Create</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- My Whiteboards Modal -->
+        <div class="modal fade" id="whiteboards-modal" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">My Whiteboards</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div id="whiteboards-list" class="row">
+                            <!-- Whiteboards will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Share Modal -->
+        <div class="modal fade" id="share-modal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Share Whiteboard</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="share-link" class="form-label">Share Link</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="share-link" readonly>
+                                <button class="btn btn-outline-secondary" type="button" id="copy-link-btn">
+                                    <i class="bi bi-clipboard"></i> Copy
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="collaborator-username" class="form-label">Add Collaborator</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="collaborator-username" placeholder="Username">
+                                <button class="btn btn-primary" type="button" id="add-collaborator-btn">
+                                    <i class="bi bi-person-plus"></i> Add
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Notifications -->
+        <div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+            <div id="toast-container" class="toast-container">
+                <!-- Toasts will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../src/js/app.js"></script>
+</body>
+</html>
